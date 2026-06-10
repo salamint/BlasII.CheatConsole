@@ -29,6 +29,17 @@ internal class ValueStatCommand(string name, string statName) : ModCommand(name)
                     Current();
                     break;
                 }
+            case "set":
+                {
+                    if (!ValidateParameterCount(args, 2))
+                        return;
+
+                    if (!ValidateIntParamater(args[1], out int amount))
+                        return;
+
+                    Set(amount);
+                    break;
+                }
             default:
                 {
                     WriteFailure("Unknown subcommand: " + args[0]);
@@ -47,5 +58,11 @@ internal class ValueStatCommand(string name, string statName) : ModCommand(name)
     {
         int amount = AssetStorage.PlayerStats.GetCurrentValue(AssetStorage.ValueStats[_statName]);
         Write($"Current {Name} is {amount}");
+    }
+
+    private void Set(int amount)
+    {
+        Write($"Setting {amount} to {Name}");
+        AssetStorage.PlayerStats.SetCurrentValue(AssetStorage.ValueStats[_statName], amount);
     }
 }
